@@ -43,3 +43,23 @@ export const loadCommands = async () => {
         console.log(error)
     }
 }
+
+export const loadEvents = async (client) => {
+    const files = await fg('./src/events/**/index.js')
+
+    for (const file of files) {
+        const eventFile = await import(file)
+
+        if (eventFile.event.once) {
+            client.once(
+                eventFile.event.name,
+                eventFile.execute
+            )
+        } else {
+            client.on(
+                eventFile.event.name,
+                eventFile.execute
+            )
+        }
+    }
+}

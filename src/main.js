@@ -3,6 +3,7 @@ import { loadCommands } from "@/core/loader"
 import dotenv from 'dotenv'
 import vueInit from '@/core/vue'
 import { useAppStore } from '@/store/app'
+import { loadEvents } from './core/loader'
 
 dotenv.config()
 vueInit()
@@ -12,8 +13,6 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] })
 const appStore = new useAppStore()
 appStore.Client = client
 
-client.once(Events.ClientReady, c => {
-	console.log(`Ready! Logged in as ${c.user.tag}`)
-})
+loadEvents(client)
 
 client.login(process.env.TOKEN)
