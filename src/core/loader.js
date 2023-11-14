@@ -19,7 +19,7 @@ const updateSlashCommands = async (commands) => {
 
         console.log(`Successfully reload ${result.length} application (/) commands.`)
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -40,26 +40,30 @@ export const loadCommands = async () => {
         appStore.commandsExectionMap = executes
 
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
 export const loadEvents = async (client) => {
     const files = await fg('./src/events/**/index.js')
 
-    for (const file of files) {
-        const eventFile = await import(file)
+    try {
+        for (const file of files) {
+            const eventFile = await import(file)
 
-        if (eventFile.event.once) {
-            client.once(
-                eventFile.event.name,
-                eventFile.execute
-            )
-        } else {
-            client.on(
-                eventFile.event.name,
-                eventFile.execute
-            )
+            if (eventFile.event.once) {
+                client.once(
+                    eventFile.event.name,
+                    eventFile.execute
+                )
+            } else {
+                client.on(
+                    eventFile.event.name,
+                    eventFile.execute
+                )
+            }
         }
+    } catch (error) {
+        console.error(error)
     }
 }
