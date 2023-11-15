@@ -10,12 +10,9 @@ export const execute = async (interaction) => {
     if (!interaction.isStringSelectMenu()) return
 
     if (interaction.customId == 'selectCmdMenu') {
-        let choice = ''
+        const appStore = new useAppStore()
+        const command = appStore.commandsExectionMap.get(interaction.values[0])
 
-        await interaction.values.forEach(async value => {
-            choice += `${value}`
-        })
-
-        await interaction.reply({ content: `${choice}` })
+        await command(interaction)
     }
 }

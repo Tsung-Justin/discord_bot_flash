@@ -22,13 +22,16 @@ const commands = []
 
 for (const file of files) {
     const cmdInformation = await import(file)
-    commands.push({ 'name': cmdInformation.command.name, 'description': cmdInformation.command.description })
-    // commands[cmdInformation.command.name] = cmdInformation.command.description
-    // if (cmdInformation.command.name != 'menu') {
-    //     commands.push(cmdInformation.command.description)
-    // }
+
+    if (cmdInformation.command.name != 'menu') {
+        commands.push({
+            name: cmdInformation.command.name,
+            description: cmdInformation.command.description,
+            // execute: cmdInformation.execute
+        })
+    }
 }
 
 commands.map(command => {
-    console.log(`Name: ${command.name}, Description: ${command.description}`)
+    console.log(`Name: ${command.name}, Description: ${command.description}, Execute: ${command.execute}`)
 })
