@@ -31,9 +31,9 @@ export const loadCommands = async () => {
         const files = await fg('./src/commands/**/index.js')
 
         for (const file of files) {
-            const cmd = await import(file)
-            commands.push(cmd.command)
-            executes.set(cmd.command.name, cmd.execute)
+            const cmdInformation = await import(file)
+            commands.push(cmdInformation.command)
+            executes.set(cmdInformation.command.name, cmdInformation.execute)
         }
 
         await updateSlashCommands(commands)
@@ -49,17 +49,17 @@ export const loadEvents = async (client) => {
 
     try {
         for (const file of files) {
-            const eventFile = await import(file)
+            const eventInformation = await import(file)
 
-            if (eventFile.event.once) {
+            if (eventInformation.event.once) {
                 client.once(
-                    eventFile.event.name,
-                    eventFile.execute
+                    eventInformation.event.name,
+                    eventInformation.execute
                 )
             } else {
                 client.on(
-                    eventFile.event.name,
-                    eventFile.execute
+                    eventInformation.event.name,
+                    eventInformation.execute
                 )
             }
         }
